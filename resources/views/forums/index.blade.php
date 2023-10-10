@@ -36,8 +36,6 @@
             <hr />
             
             @include('partials.errors')
-            
-
             <form method="POST" action="forums">
                 {{ csrf_field() }}
                 <div class="form-group">

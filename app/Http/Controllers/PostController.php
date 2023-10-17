@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,13 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $post_request)
     {
-        //
+        dd($post_request);
+        Post::create($post_request->input());
+         // Esto coge todos los datos que vienen vía Post y los inserta
+        return back()->with('message', ['success', __('Post creado correctamente')]);
+
     }
 
     /**

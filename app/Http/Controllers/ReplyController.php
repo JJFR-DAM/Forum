@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReplyRequest;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,10 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReplyRequest $reply_request)
     {
-        //
+        Reply::create($reply_request->input()); // Esto coge todos los datos que vienen vía Post y los inserta
+        return back()->with('message', ['success', __('Post creado correctamente')]);
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\App;
 
 class Post extends Model
 {
@@ -20,6 +21,18 @@ class Post extends Model
         'description',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($post) {
+            if( ! App::runningInConsole() ) {
+                $post->user_id = auth()->id();
+            }
+        
+        });
+    }
+
     public function forum(): BelongsTo
     {
         return $this->belongsTo(Forum::class, 'forum_id');
@@ -32,4 +45,6 @@ class Post extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
+
 }

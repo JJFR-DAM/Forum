@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReplyRequest;
 use App\Models\Reply;
+use App\Rules\ValidReply;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
@@ -27,10 +27,17 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ReplyRequest $reply_request)
+    public function store(Request $request)
     {
-        Reply::create($reply_request->input()); // Esto coge todos los datos que vienen vía Post y los inserta
-        return back()->with('message', ['success', __('Post creado correctamente')]);
+        $this->validate(request(), [
+            'reply' => ['required', new ValidReply]
+        ]);
+
+        Reply::create(request()->input());
+
+        return back()->with('message', ['success', __('Respuesta añadida correctamente')]);
+
+
     }
 
     /**
@@ -44,9 +51,15 @@ class ReplyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reply $reply)
+    public function edit(Reply $reply, Request $request)
     {
-        //
+        $this->validate(request(), [
+            'reply' => ['required', new ValidReply]
+        ]);
+
+        $reply->update(request()->input());
+        
+        return back()->with('message', ['success', __('Respuesta editada correctamente')]);
     }
 
     /**
@@ -62,6 +75,7 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+		$reply->delete();
+		return back()->with('message', ['success', __('Respuesta eliminada correctamente')]);
     }
 }

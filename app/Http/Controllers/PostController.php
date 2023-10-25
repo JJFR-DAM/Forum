@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use App\Rules\ValidReply;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -29,9 +30,8 @@ class PostController extends Controller
      */
     public function store(PostRequest $post_request)
     {
-        dd($post_request);
         Post::create($post_request->input());
-         // Esto coge todos los datos que vienen vía Post y los inserta
+        // Esto coge todos los datos que vienen vía Post y los inserta
         return back()->with('message', ['success', __('Post creado correctamente')]);
 
     }
@@ -48,9 +48,14 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Post $post, PostRequest $post_request)
     {
-        //
+        $this->validate(request(), [
+            'title' => ['required', new ValidReply],
+            'description' => ['required', new ValidReply],
+        ]);
+        $post->update($post_request->input());
+        return back()->with('message', ['success', __('Post editado correctamente')]);
     }
 
     /**
@@ -66,6 +71,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if (!$post->isOwner()) {
+            abort(401);
+        }
+        $post->delete();
+        return back()->with('message', ['success', __('Post y respuestas eliminados correctamente')]);
     }
 }

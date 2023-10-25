@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row">
+    <div class="row bg-dark text-light">
         <div class="col-md-8 col-md-offset-2">
             <h1 class="text-center text-mute"> {{ __('Foros') }} </h1>
 
@@ -16,7 +16,7 @@
 
                     </div>
 
-                    <div class="panel-body">
+                    <div class="panel-body mb-3">
                         {{ $forum->description }}
                     </div>
                 </div>
@@ -28,29 +28,31 @@
             @endforelse
 
             @if ($forums->count())
-                {{ $forums->links() }}
+                <div class="mt-3">
+                    {{ $forums->links() }}
+                </div>
             @endif
 
-            <h2>{{ __("Añadir un nuevo foro") }}</h2>
-            
+            <h2 class="mb-3">{{ __('Añadir un nuevo foro') }}</h2>
+
             <hr />
-            
+
             @include('partials.errors')
             <form method="POST" action="forums">
                 {{ csrf_field() }}
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="name" class="col-md-12 control-label">
                         {{ __('Nombre') }}
                     </label>
                     <input id="name" class="form-control" name="name" value="{{ old('name') }}" />
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="description" class="col-md-12 control-label">
                         {{ __('Descripción') }}
                     </label>
                     <input id="description" class="form-control" name="description" value="{{ old('description') }}" />
                 </div>
-                <button type="submit" name="addForum" class="btn btn-default">
+                <button type="submit" name="addForum" class="btn btn-warning mb-3">
                     {{ __('Añadir Foro') }}
                 </button>
             </form>

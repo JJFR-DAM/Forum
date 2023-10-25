@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\PDFController;
 // use App\Http\Controllers\PruebaController;
 // use App\Http\Controllers\Prueba2Controller;
 
@@ -55,3 +56,5 @@ Route::resource('forums', ForumController::class);
 Route::resource('posts', PostController::class);
 
 Route::resource('replies', ReplyController::class);
+
+Route::get('generate-pdf', [PDFController::class, 'generatePDF']);
